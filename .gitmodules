@@ -1,0 +1,3 @@
+[submodule "spot-finder"]
+	path = spot-finder
+	url = git@github.com:sunangel-project/spot-finder.git
