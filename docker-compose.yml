@@ -8,11 +8,11 @@ services:
     command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222 "
     networks: ["nats"]
   
-  spot-finder:
-    image: spot-finder
-    build: ./spot-finder
-    depends_on: ["nats"]
-    networks: ["nats"]
+  #spot-finder:
+  #  image: spot-finder
+  #  build: ./spot-finder
+  #  depends_on: ["nats"]
+  #  networks: ["nats"]
 
 networks:
   nats:
