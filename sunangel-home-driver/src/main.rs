@@ -1,24 +1,52 @@
+use futures_util::StreamExt;
+use uuid::Uuid;
+use async_nats::Client;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 struct Location {
-    lat: i32,
-    lon: i32,
+    lat: f64,
+    lon: f64,
 }
 
 #[derive(Serialize, Deserialize)]
 struct SearchQuery {
+    id: String,
     loc: Location,
     rad: u32,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), async_nats::Error> {
-    let connection = async_nats::connect("localhost").await?;
+    let client = async_nats::connect("localhost").await?;
     
-    let query = SearchQuery { loc: Location { lat: 48, lon: 9 }, rad: 3_000 };
-    let msg = serde_json::to_string(&query)?;
-    connection.publish("search".to_string(), msg.into()).await?;
+        let id = Uuid::new_v4();
+        send_search_query(&client, id).await?;
 
+    let mut  subscriber = client.subscribe("spots".to_string()).await?;
+    
+    while let Some(msg) = subscriber.next().await {
+        println!("{msg:?}");
+    }
+
+    Ok(())
+}
+
+async fn send_search_query(client: &Client, id: Uuid) -> Result<(), async_nats::Error> {
+    let query = SearchQuery {
+        id: id.to_string(),
+        loc: Location { /* 48.81478,9.58191 */
+            lat: 48.81478f64,
+            lon: 9.58191f64
+        },
+        rad: 3_000,
+    };
+
+    let msg = serde_json::to_string(&query)?;
+    client.publish(
+        "search".to_string(),
+        msg.into(),
+    ).await?;
+    
     Ok(())
 }
