@@ -35,11 +35,11 @@ async fn main() -> Result<(), async_nats::Error> {
 async fn send_search_query(client: &Client, id: Uuid) -> Result<(), async_nats::Error> {
     let query = SearchQuery {
         id: id.to_string(),
-        loc: Location { /* 48.81478,9.58191 */
-            lat: 48.81478f64,
-            lon: 9.58191f64
+        loc: Location { /* home 48.81478,9.58191 */ /* aussicht 48.81862, 9.5873 */
+            lat: 48.81862,
+            lon:  9.5873
         },
-        rad: 3_000,
+        rad: 500,
     };
 
     let msg = serde_json::to_string(&query)?;
