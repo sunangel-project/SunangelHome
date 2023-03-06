@@ -42,7 +42,10 @@ async fn send_search_query(client: &Client, id: Uuid) -> Result<(), async_nats::
         rad: 500,
     };
 
-    let msg = serde_json::to_string(&query)?;
+    let msg = serde_json::json!({
+        "search_query": query,
+    }).to_string();
+
     client.publish(
         "search".to_string(),
         msg.into(),
