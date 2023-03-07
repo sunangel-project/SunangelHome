@@ -1,3 +1,6 @@
 [submodule "spot-finder"]
 	path = spot-finder
 	url = git@github.com:sunangel-project/spot-finder.git
+[submodule "request-returner"]
+	path = request-returner
+	url = git@github.com:sunangel-project/request-returner.git
